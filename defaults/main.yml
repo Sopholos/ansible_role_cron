@@ -1,0 +1,6 @@
+cron_tasks: []
+cron_discover_file: '/etc/zabbix/zabbix_agent2.d/cron_discovery'
+cron_log_path: "/var/log/cron"
+cron_zabbix_adds: "; zabbix_sender -z zabbix.agrohistory.local -s zabbix-a-test.agrohistory.local -k trap[ansible_zabbix_discovery_tasks] -o $? >> /var/log/cron/ansible_zabbix_discovery_tasks"
+cron_zabbix_server: "localhost"
+cron_zabbix_client: "client"
