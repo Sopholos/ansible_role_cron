@@ -18,7 +18,7 @@
 - name: Creates a cron file under /etc/cron.d without monitoring
   cron:
     name: "{{ item.name }}"
-    weekday: "{{ item.weekday }}"
+    weekday: "{{ item.weekday | default ('*') }}"
     minute: "{{ item.minute | default ('*') }}"
     hour: "{{ item.hour | default ('*') }}"
     day: "{{ item.day | default ('*') }}"
@@ -35,7 +35,7 @@
 - name: Creates a cron file under /etc/cron.d with monitoring
   cron:
     name: "{{ item.name }}"
-    weekday: "{{ item.weekday }}"
+    weekday: "{{ item.weekday | default ('*') }}"
     minute: "{{ item.minute | default ('*') }}"
     hour: "{{ item.hour | default ('*') }}"
     day: "{{ item.day | default ('*') }}"
