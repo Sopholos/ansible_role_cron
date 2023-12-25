@@ -41,7 +41,7 @@
     day: "{{ item.day | default ('*') }}"
     month: "{{ item.month | default ('*') }}"
     user: "{{ item.user | default ('root') }}"
-    job: "{{ item.job }} ; zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o $? >> /var/log/cron/ansible_zabbix_discovery_tasks"
+    job: "{{ item.job }} ; zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o $? >> {{ cron_log_path }}/{{ item.name }}"
     cron_file: "ansible_{{ item.name }}"
   with_items:
     - "{{ cron_tasks }}"
