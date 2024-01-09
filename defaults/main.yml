@@ -3,3 +3,4 @@ cron_discover_file: '/etc/zabbix/zabbix_agent2.d/cron_discovery'
 cron_log_path: "/var/log/cron"
 cron_zabbix_server: "localhost"
 cron_zabbix_client: "client"
+cron_logger_path: "/usr/bin/logger"
