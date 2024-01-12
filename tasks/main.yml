@@ -31,7 +31,7 @@
   when:
     - cron_tasks is defined
     - not item.zabbix_mon
-    - cron_tasks.special_time is not defined
+    - item.special_time is not defined
 
 - name: Creates a cron file under /etc/cron.d without monitoring special time
   cron:
@@ -49,7 +49,7 @@
   when:
     - cron_tasks is defined
     - not item.zabbix_mon
-    - cron_tasks.special_time is defined
+    - item.special_time is defined
 
 - name: Creates a cron file under /etc/cron.d with monitoring
   cron:
@@ -67,7 +67,7 @@
   when:
     - cron_tasks is defined
     - item.zabbix_mon
-    - cron_tasks.special_time is not defined
+    - item.special_time is not defined
 
 - name: Creates a cron file under /etc/cron.d with monitoring
   cron:
@@ -85,4 +85,4 @@
   when:
     - cron_tasks is defined
     - item.zabbix_mon
-    - cron_tasks.special_time is defined
+    - item.special_time is defined
