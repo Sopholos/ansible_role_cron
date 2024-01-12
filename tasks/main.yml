@@ -44,6 +44,7 @@
     user: "{{ item.user | default ('root') }}"
     job: "{{ item.job }}"
     cron_file: "ansible_{{ item.name }}"
+    special_time: "{{ item.special_time }}"
   with_items:
     - "{{ cron_tasks }}"
   when:
@@ -80,6 +81,7 @@
     user: "{{ item.user | default ('root') }}"
     job: "{{ item.job }} ; zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o $? | {{ cron_logger_path }} -t {{ item.tag }}"
     cron_file: "ansible_{{ item.name }}"
+    special_time: "{{ item.special_time }}"
   with_items:
     - "{{ cron_tasks }}"
   when:
