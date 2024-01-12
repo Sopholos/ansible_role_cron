@@ -69,7 +69,7 @@
     - item.zabbix_mon
     - item.special_time is not defined
 
-- name: Creates a cron file under /etc/cron.d with monitoring
+- name: Creates a cron file under /etc/cron.d with monitoring special time
   cron:
     name: "{{ item.name }}"
     weekday: "{{ item.weekday | default ('*') }}"
