@@ -31,7 +31,7 @@
   when:
     - cron_tasks is defined
     - not item.zabbix_mon
-    - cron_tasks.special_time is not defined
+    - item.special_time is not defined
 
 - name: Creates a cron file under /etc/cron.d without monitoring special time
   cron:
@@ -44,12 +44,13 @@
     user: "{{ item.user | default ('root') }}"
     job: "{{ item.job }}"
     cron_file: "ansible_{{ item.name }}"
+    special_time: "{{ item.special_time }}"
   with_items:
     - "{{ cron_tasks }}"
   when:
     - cron_tasks is defined
     - not item.zabbix_mon
-    - cron_tasks.special_time is defined
+    - item.special_time is defined
 
 - name: Creates a cron file under /etc/cron.d with monitoring
   cron:
@@ -67,9 +68,9 @@
   when:
     - cron_tasks is defined
     - item.zabbix_mon
-    - cron_tasks.special_time is not defined
+    - item.special_time is not defined
 
-- name: Creates a cron file under /etc/cron.d with monitoring
+- name: Creates a cron file under /etc/cron.d with monitoring special time
   cron:
     name: "{{ item.name }}"
     weekday: "{{ item.weekday | default ('*') }}"
@@ -80,9 +81,10 @@
     user: "{{ item.user | default ('root') }}"
     job: "{{ item.job }} ; zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o $? | {{ cron_logger_path }} -t {{ item.tag }}"
     cron_file: "ansible_{{ item.name }}"
+    special_time: "{{ item.special_time }}"
   with_items:
     - "{{ cron_tasks }}"
   when:
     - cron_tasks is defined
     - item.zabbix_mon
-    - cron_tasks.special_time is defined
+    - item.special_time is defined
