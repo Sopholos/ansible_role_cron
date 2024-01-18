@@ -67,6 +67,7 @@
     - "{{ cron_tasks }}"
   when:
     - cron_tasks is defined
+    - item.zabbix_mon is defined
     - item.zabbix_mon
     - item.special_time is not defined
 
@@ -86,5 +87,6 @@
     - "{{ cron_tasks }}"
   when:
     - cron_tasks is defined
+    - item.zabbix_mon is defined
     - item.zabbix_mon
     - item.special_time is defined
