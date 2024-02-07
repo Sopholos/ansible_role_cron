@@ -21,6 +21,7 @@
     user: "{{ item.user | default ('root') }}"
     job: "{{ item.job }}"
     cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
+    state: "{{ item.state | default (omit) }}"
   with_items:
     - "{{ cron_tasks }}"
   when:
@@ -42,6 +43,7 @@
     job: "{{ item.job }}"
     cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
     special_time: "{{ item.special_time }}"
+    state: "{{ item.state | default (omit) }}"
   with_items:
     - "{{ cron_tasks }}"
   when:
