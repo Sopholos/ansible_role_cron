@@ -20,7 +20,9 @@
     month: "{{ item.month | default ('*') }}"
     user: "{{ item.user | default ('root') }}"
     job: "{{ item.job }}"
-    cron_file: "ansible_{{ item.name }}"
+    cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
+    state: "{{ item.state | default (omit) }}"
+    disabled : "{{ item.disabled  | default (omit) }}"
   with_items:
     - "{{ cron_tasks }}"
   when:
@@ -40,8 +42,10 @@
     month: "{{ item.month | default ('*') }}"
     user: "{{ item.user | default ('root') }}"
     job: "{{ item.job }}"
-    cron_file: "ansible_{{ item.name }}"
+    cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
     special_time: "{{ item.special_time }}"
+    state: "{{ item.state | default (omit) }}"
+    disabled : "{{ item.disabled  | default (omit) }}"
   with_items:
     - "{{ cron_tasks }}"
   when:
@@ -61,7 +65,9 @@
     month: "{{ item.month | default ('*') }}"
     user: "{{ item.user | default ('root') }}"
     job: "{{ item.job }} ; zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o $? | {{ cron_logger_path }} -t {{ item.tag }}"
-    cron_file: "ansible_{{ item.name }}"
+    cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
+    state: "{{ item.state | default (omit) }}"
+    disabled : "{{ item.disabled  | default (omit) }}"
   with_items:
     - "{{ cron_tasks }}"
   when:
@@ -82,8 +88,10 @@
     month: "{{ item.month | default ('*') }}"
     user: "{{ item.user | default ('root') }}"
     job: "{{ item.job }} ; zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o $? | {{ cron_logger_path }} -t {{ item.tag }}"
-    cron_file: "ansible_{{ item.name }}"
+    cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
     special_time: "{{ item.special_time }}"
+    state: "{{ item.state | default (omit) }}"
+    disabled : "{{ item.disabled  | default (omit) }}"
   with_items:
     - "{{ cron_tasks }}"
   when:
