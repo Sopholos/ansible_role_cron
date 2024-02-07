@@ -4,16 +4,11 @@
     update_cache: yes
     name: zabbix-sender
 
-- name: ensure discover file exists
+- name: ensure discover tasks script exists
   template:
-    src: "discover_file.j2"
-    dest: "{{ cron_discover_file }}"
+    src: "Discover-CronTasks.ps1.j2"
+    dest: "{{ cron_discover_script }}"
     mode: 0740
-
-- name: ensure log dir exists
-  file:
-    path: "{{ cron_log_path }}"
-    state: directory
 
 - name: Creates a cron file under /etc/cron.d without monitoring
   cron:
@@ -30,8 +25,10 @@
     - "{{ cron_tasks }}"
   when:
     - cron_tasks is defined
-    - not item.zabbix_mon
+    - item.zabbix_mon is not defined or not item.zabbix_mon
     - item.special_time is not defined
+  notify:
+    Discover cron tasks
 
 - name: Creates a cron file under /etc/cron.d without monitoring special time
   cron:
@@ -49,8 +46,10 @@
     - "{{ cron_tasks }}"
   when:
     - cron_tasks is defined
-    - not item.zabbix_mon
+    - item.zabbix_mon is not defined or not item.zabbix_mon
     - item.special_time is defined
+  notify:
+    Discover cron tasks
 
 - name: Creates a cron file under /etc/cron.d with monitoring
   cron:
@@ -67,8 +66,11 @@
     - "{{ cron_tasks }}"
   when:
     - cron_tasks is defined
+    - item.zabbix_mon is defined
     - item.zabbix_mon
     - item.special_time is not defined
+  notify:
+    Discover cron tasks
 
 - name: Creates a cron file under /etc/cron.d with monitoring special time
   cron:
@@ -86,5 +88,8 @@
     - "{{ cron_tasks }}"
   when:
     - cron_tasks is defined
+    - item.zabbix_mon is defined
     - item.zabbix_mon
     - item.special_time is defined
+  notify:
+    Discover cron tasks
