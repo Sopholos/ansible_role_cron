@@ -9,6 +9,20 @@
     src: "Discover-CronTasks.ps1.j2"
     dest: "{{ cron_discover_script }}"
     mode: 0740
+  notify:
+    Discover cron tasks
+
+- name: Creates SHELL varible in a cron file under /etc/cron.d
+  cron:
+    name: SHELL
+    env: yes
+    job: /bin/bash
+    user: "{{ item.user | default ('root') }}"
+    cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
+  with_items:
+    - "{{ cron_tasks }}"
+  notify:
+    Discover cron tasks
 
 - name: Creates a cron file under /etc/cron.d without monitoring
   cron:
@@ -64,7 +78,10 @@
     day: "{{ item.day | default ('*') }}"
     month: "{{ item.month | default ('*') }}"
     user: "{{ item.user | default ('root') }}"
-    job: "{{ item.job }} ; zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o $? | {{ cron_logger_path }} -t {{ item.tag }}"
+    job: >
+      zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o "-1.0" ;
+      {{ item.job }} | {{ cron_logger_path }} -t {{ item.tag }} ;
+      zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o ${PIPESTATUS[0]}
     cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
     state: "{{ item.state | default (omit) }}"
     disabled : "{{ item.disabled  | default (omit) }}"
@@ -87,7 +104,10 @@
     day: "{{ item.day | default ('*') }}"
     month: "{{ item.month | default ('*') }}"
     user: "{{ item.user | default ('root') }}"
-    job: "{{ item.job }} ; zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o $? | {{ cron_logger_path }} -t {{ item.tag }}"
+    job: >
+      zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o "-1.0" ;
+      {{ item.job }} | {{ cron_logger_path }} -t {{ item.tag }} ;
+      zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k trap[{{ item.name }}] -o ${PIPESTATUS[0]}
     cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
     special_time: "{{ item.special_time }}"
     state: "{{ item.state | default (omit) }}"
