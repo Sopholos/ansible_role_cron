@@ -2,10 +2,6 @@
 $dir = '/etc/cron.d'
 $discovery_file = "{{ cron_discover_file }}"
 
-function Invoke-Sudo {
-    & /usr/bin/env sudo pwsh -command "& $args"
-}
-
 if (!(Test-Path $discovery_file)) {
     New-Item $discovery_file -type "file"
 }
@@ -13,8 +9,12 @@ if (!(Test-Path $discovery_file)) {
 Clear-Content $discovery_file
 
 Get-ChildItem -Path $dir -Recurse -File  | ForEach-Object {
-    $cronname = ($_.NAME)
-    if ($cronname -like "ansible_*") {
-        $cronname -replace '^ansible_(.*)','$1' | Add-Content $discovery_file
+    $file = $_.FullName
+    $lines = Select-String -Path $file  -Pattern "^#Ansible:\s+(?<name>.+)$" -AllMatches
+
+    $lines | % {
+        $name = $_.Matches[0].Groups['name'].Value     
+        $name | Add-Content $discovery_file
+        echo $name
     }
 }
