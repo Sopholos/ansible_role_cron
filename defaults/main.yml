@@ -5,3 +5,4 @@ cron_zabbix_server: "localhost"
 cron_zabbix_client: "client"
 cron_logger_path: "/usr/bin/logger"
 cron_discover_script: "/usr/local/bin/discover-crontasks.ps1"
+cron_zabbix_monitor_jobs_default: false
