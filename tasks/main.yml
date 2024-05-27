@@ -79,7 +79,7 @@
     user: "{{ item.user | default('root') }}"
     job: >
       zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k "trap[{{ item.name }}]" -o "-1.0" ;
-      {{ item.job }} | {{ cron_logger_path }} -t {{ item.tag }} ;
+      {{ item.job }} 2>&1 | {{ cron_logger_path }} -t {{ item.tag }} ;
       zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k "trap[{{ item.name }}]" -o ${PIPESTATUS[0]}
     cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
     state: "{{ item.state | default(omit) }}"
@@ -103,7 +103,7 @@
     user: "{{ item.user | default('root') }}"
     job: >
       zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k "trap[{{ item.name }}]" -o "-1.0" ;
-      {{ item.job }} | {{ cron_logger_path }} -t {{ item.tag }} ;
+      {{ item.job }} 2>&1 | {{ cron_logger_path }} -t {{ item.tag }} ;
       zabbix_sender -z {{ cron_zabbix_server }} -s {{ cron_zabbix_client }} -k "trap[{{ item.name }}]" -o ${PIPESTATUS[0]}
     cron_file: "{{ item.cron_file | default('ansible_' + item.name) }}"
     special_time: "{{ item.special_time }}"
