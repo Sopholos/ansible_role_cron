@@ -1,6 +1,6 @@
 ---
 - name: Ensure zabbix sender installed
-  apt:
+  package:
     name: zabbix-sender
 
 - name: ensure discover tasks script exists
