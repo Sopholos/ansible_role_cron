@@ -2,6 +2,11 @@
 - name: Ensure zabbix sender installed
   package:
     name: zabbix-sender
+  ignore_errors: True
+
+- name: Ensure crontab installed
+  package:
+    name: cron
 
 - name: ensure discover tasks script exists
   template:
